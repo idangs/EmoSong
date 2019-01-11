@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">EmoSong</string>
+    <string name="smile_value">SMILE_VALUE</string>
+    <string name="upload">Please upload an image</string>
+    <string name="cannot">Cannot find smiling prob.</string>
+    <string name="prob">Your smiling prob. is </string>
+    <string name="unable">Not able to find smilling prob</string>
+    <string name="no">No smiling prob...</string>
+    <string name="sm_prob">The smiling prob is</string>
+    <string name="need_camera">I need it for camera</string>
+    <string name="camera_perm_granted">CAMERA perm granted</string>
+    <string name="camera_not">CAMERA perm NOT granted</string>
+    <string name="data">data</string>
+    <string name="songurls">songUrls</string>
+    <string name="error">Error:</string>
+</resources>

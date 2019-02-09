@@ -30,6 +30,7 @@ class SongActivity : AppCompatActivity(), MediaPlayer.OnPreparedListener{
         val extras = intent.extras
         if (extras != null) {
             url = extras.getString(getString(R.string.smile_value))
+            println("Here's your url: ${url}")
             fetchAudioUrlFromFirebase(url)
         }
 
@@ -43,21 +44,26 @@ class SongActivity : AppCompatActivity(), MediaPlayer.OnPreparedListener{
     }
 
     private fun fetchAudioUrlFromFirebase(uri: String) {
-        val storage = FirebaseStorage.getInstance()
-        // Create a storage reference from our app
-        val storageRef = storage.getReferenceFromUrl(uri)
-        storageRef.downloadUrl.addOnSuccessListener(OnSuccessListener<Any> { uri ->
-            try {
-                // Download url of file
-                val url = uri.toString()
-                mp.setDataSource(url)
-                // wait for media player to get prepare
-                mp.setOnPreparedListener(this@SongActivity)
-                mp.prepareAsync()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        })
+//        val storage = FirebaseStorage.getInstance()
+//        // Create a storage reference from our app
+//        val storageRef = storage.getReferenceFromUrl(uri)
+//        storageRef.downloadUrl.addOnSuccessListener(OnSuccessListener<Any> { uri ->
+//            try {
+//                // Download url of file
+//                val url = uri.toString()
+////                println("Here's your url: ${url}")
+//                mp.setDataSource(url)
+//                // wait for media player to get prepare
+//                mp.setOnPreparedListener(this@SongActivity)
+//                mp.prepareAsync()
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//        })
+        mp.setDataSource(uri)
+        // wait for media player to get prepare
+        mp.setOnPreparedListener(this@SongActivity)
+        mp.prepareAsync()
     }
 
     override fun onPrepared(mp: MediaPlayer) {

@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var hypeUrls = mutableListOf<String>()
     private var mildUrls = mutableListOf<String>()
     private var sadUrls = mutableListOf<String>()
+    private var testUrls = mutableListOf<String>()
 
     private val RESULT_LOAD_IMAGE = 100
 
@@ -216,6 +217,8 @@ class MainActivity : AppCompatActivity() {
                         songIds[i].first() == 'h' -> hypeUrls.add(songUrls[i])
                         songIds[i].first() == 'm' -> mildUrls.add(songUrls[i])
                         songIds[i].first() == 's' -> sadUrls.add(songUrls[i])
+                        //This is for testing purpose
+                        songIds[i].first() == 't' -> testUrls.add(songUrls[i])
                     }
                 }
             }

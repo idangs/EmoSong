@@ -30,7 +30,6 @@ class SongActivity : AppCompatActivity(), MediaPlayer.OnPreparedListener{
         val extras = intent.extras
         if (extras != null) {
             url = extras.getString(getString(R.string.smile_value))
-            println("Here's your url: ${url}")
             fetchAudioUrlFromFirebase(url)
         }
 
@@ -44,6 +43,7 @@ class SongActivity : AppCompatActivity(), MediaPlayer.OnPreparedListener{
     }
 
     private fun fetchAudioUrlFromFirebase(uri: String) {
+
 //        val storage = FirebaseStorage.getInstance()
 //        // Create a storage reference from our app
 //        val storageRef = storage.getReferenceFromUrl(uri)

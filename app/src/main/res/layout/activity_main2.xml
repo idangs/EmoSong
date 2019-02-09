@@ -47,14 +47,13 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="352dp"
+        android:layout_marginBottom="264dp"
         android:fontFamily="serif-monospace"
         android:gravity="center"
         android:text="Take Picture"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent"
         tools:background="@android:color/white" />
 
@@ -66,7 +65,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="276dp"
+        android:layout_marginBottom="184dp"
         android:background="@android:color/white"
         android:fontFamily="serif-monospace"
         android:gravity="center"
@@ -75,7 +74,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -86,7 +85,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="512dp"
+        android:layout_marginBottom="420dp"
         android:fontFamily="serif-monospace"
         android:gravity="center"
         android:text="We believe playing the right music means a lot to the individual."
@@ -95,7 +94,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -106,7 +105,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="436dp"
+        android:layout_marginBottom="344dp"
         android:fontFamily="serif-monospace"
         android:gravity="center"
         android:text="Help us find it, give us your voice:"
@@ -114,7 +113,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

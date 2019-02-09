@@ -19,6 +19,7 @@ import android.provider.MediaStore
 import android.content.Intent
 import android.widget.Toast
 import com.google.firebase.firestore.*
+import hu.ait.android.testfirebase.data.Quotes
 import hu.ait.android.testfirebase.data.Songs
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -31,7 +32,14 @@ class MainActivity : AppCompatActivity() {
     private var hypeUrls = mutableListOf<String>()
     private var mildUrls = mutableListOf<String>()
     private var sadUrls = mutableListOf<String>()
-    private var testUrls = mutableListOf<String>()
+
+    // TODO: added
+    private lateinit var quotesListener: ListenerRegistration
+    private var quotes_array = mutableListOf<String>()
+    private var quoteIds = mutableListOf<String>()
+    private var happyQuotes = mutableListOf<String>()
+    private var sadQuotes = mutableListOf<String>()
+    // TODO: added
 
     private val RESULT_LOAD_IMAGE = 100
 
@@ -39,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val CAMERA_REQUEST_CODE = 102
+        val CAPTION = "CAPTION"
     }
 
     private lateinit var uploadBitmap: Bitmap
@@ -81,12 +90,14 @@ class MainActivity : AppCompatActivity() {
                 var smile_prop = getSongs(analyze().toDouble())
                 val i = Intent(this@MainActivity, SongActivity::class.java)
                 i.putExtra(getString(R.string.smile_value), smile_prop)
+                i.putExtra("CAPTION", getQuotes(analyze().toDouble()))
                 startActivity(i)
             } else {
                 Toast.makeText(this@MainActivity, getString(R.string.upload), Toast.LENGTH_LONG).show()
             }
         }
     }
+
 
 
     private fun analyze(): Float {
@@ -192,6 +203,8 @@ class MainActivity : AppCompatActivity() {
     fun initPosts() {
         val db = FirebaseFirestore.getInstance()
         val postsCollection = db.collection(getString(R.string.songurls))
+        //TODO: added
+        val quotesCollection = db.collection("quotes")
 
         postsListener = postsCollection.addSnapshotListener(object: EventListener<QuerySnapshot> {
             override fun onEvent(querySnapshot: QuerySnapshot?, p1: FirebaseFirestoreException?) {
@@ -217,15 +230,43 @@ class MainActivity : AppCompatActivity() {
                         songIds[i].first() == 'h' -> hypeUrls.add(songUrls[i])
                         songIds[i].first() == 'm' -> mildUrls.add(songUrls[i])
                         songIds[i].first() == 's' -> sadUrls.add(songUrls[i])
-                        //This is for testing purpose
-                        songIds[i].first() == 't' -> testUrls.add(songUrls[i])
+                    }
+                }
+
+            }
+        })
+        // TODO: added
+        quotesListener = quotesCollection.addSnapshotListener(object: EventListener<QuerySnapshot> {
+            override fun onEvent(querySnapshot: QuerySnapshot?, p1: FirebaseFirestoreException?) {
+                if (p1 != null) {
+                    Toast.makeText(this@MainActivity, getString(R.string.error)+ p1.message,
+                            Toast.LENGTH_LONG).show()
+                    return
+                }
+                for (docChange in querySnapshot!!.documentChanges) {
+                    when (docChange.type) {
+                        DocumentChange.Type.ADDED -> {
+                            val post = docChange.document.toObject(Quotes::class.java)
+                            val id = docChange.document.id
+                            quoteIds.add(id)
+                            quotes_array.add(post.quotes)
+                        }
+
+                    }
+                }
+
+                for (i in 0 until quotes_array.size) {
+                    when {
+                        quoteIds[i].first() == 'h' -> happyQuotes.add(quotes_array[i])
+                        quoteIds[i].first() == 's' -> sadQuotes.add(quotes_array[i])
                     }
                 }
             }
         })
+        // TODO: added
     }
 
-    private fun getSongs(smile_percent: Double): String{
+     infix fun getSongs(smile_percent: Double): String{
 
         return when {
             (smile_percent <= 0.333) -> {
@@ -239,6 +280,20 @@ class MainActivity : AppCompatActivity() {
             else -> {
                 val randomIndex = (0 until hypeUrls.size).shuffled().first()
                 hypeUrls[randomIndex]
+            }
+        }
+    }
+
+    // TODO: added
+    private fun getQuotes(smile_percent: Double): String {
+        return when {
+            (smile_percent <= 0.5) -> {
+                val randomIndex = (0 until sadQuotes.size).shuffled().first()
+                sadQuotes[randomIndex]
+            }
+            else -> {
+                val randomIndex = (0 until happyQuotes.size).shuffled().first()
+                happyQuotes[randomIndex]
             }
         }
     }

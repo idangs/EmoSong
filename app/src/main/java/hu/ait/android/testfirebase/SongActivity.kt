@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_song.*
 import java.io.IOException
+import hu.ait.android.testfirebase.R.id.caption
 
 
 class SongActivity : AppCompatActivity(), MediaPlayer.OnPreparedListener{
@@ -29,6 +30,10 @@ class SongActivity : AppCompatActivity(), MediaPlayer.OnPreparedListener{
 
         val extras = intent.extras
         if (extras != null) {
+            if (intent.hasExtra(MainActivity.CAPTION)) {
+                val quote = intent.getStringExtra(MainActivity.CAPTION)
+                caption.setText(quote)
+            }
             url = extras.getString(getString(R.string.smile_value))
             fetchAudioUrlFromFirebase(url)
         }

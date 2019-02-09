@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.firestore.*
+import hu.ait.android.testfirebase.data.Quotes
 import hu.ait.android.testfirebase.data.Songs
 import kotlinx.android.synthetic.main.activity_color.*
 
@@ -19,9 +20,11 @@ class ColorActivity : AppCompatActivity() {
     private var sadUrls = mutableListOf<String>()
     private var testUrls = mutableListOf<String>()
 
-    private companion object {
-        var Color = "Green"
-    }
+    private lateinit var quotesListener: ListenerRegistration
+    private var quotes_array = mutableListOf<String>()
+    private var quoteIds = mutableListOf<String>()
+    private var happyQuotes = mutableListOf<String>()
+    private var sadQuotes = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,34 +35,36 @@ class ColorActivity : AppCompatActivity() {
         g.setOnClickListener{
             val i = Intent(this@ColorActivity, SongActivity::class.java)
             i.putExtra(getString(R.string.smile_value), getSongs(0.5))
+            i.putExtra("CAPTION", getQuotes(0.5))
+
             startActivity(i)
         }
 
         w.setOnClickListener{
             val i = Intent(this@ColorActivity, SongActivity::class.java)
             i.putExtra(getString(R.string.smile_value), getSongs(0.2))
-            i.putExtra("Color", "White")
+            i.putExtra("CAPTION", getQuotes(0.2))
             startActivity(i)
         }
 
         p.setOnClickListener{
             val i = Intent(this@ColorActivity, SongActivity::class.java)
             i.putExtra(getString(R.string.smile_value), getSongs(0.7))
-//            i.putExtra("Color", "Purple")
+            i.putExtra("CAPTION", getQuotes(0.7))
             startActivity(i)
         }
 
         b.setOnClickListener{
             val i = Intent(this@ColorActivity, SongActivity::class.java)
             i.putExtra(getString(R.string.smile_value), getSongs(0.1))
-//            i.putExtra("Color", "Blue")
+            i.putExtra("CAPTION", getQuotes(0.1))
             startActivity(i)
         }
 
         r.setOnClickListener{
             val i = Intent(this@ColorActivity, SongActivity::class.java)
             i.putExtra(getString(R.string.smile_value), getSongs(0.9))
-//            i.putExtra("Color", "Red")
+            i.putExtra("CAPTION", getQuotes(0.9))
             startActivity(i)
         }
     }
@@ -67,6 +72,7 @@ class ColorActivity : AppCompatActivity() {
     fun initPosts() {
         val db = FirebaseFirestore.getInstance()
         val postsCollection = db.collection(getString(R.string.songurls))
+        val quotesCollection = db.collection("quotes")
 
         postsListener = postsCollection.addSnapshotListener(object: EventListener<QuerySnapshot> {
             override fun onEvent(querySnapshot: QuerySnapshot?, p1: FirebaseFirestoreException?) {
@@ -98,6 +104,34 @@ class ColorActivity : AppCompatActivity() {
                 }
             }
         })
+
+        quotesListener = quotesCollection.addSnapshotListener(object: EventListener<QuerySnapshot> {
+            override fun onEvent(querySnapshot: QuerySnapshot?, p1: FirebaseFirestoreException?) {
+                if (p1 != null) {
+                    Toast.makeText(this@ColorActivity, getString(R.string.error)+ p1.message,
+                            Toast.LENGTH_LONG).show()
+                    return
+                }
+                for (docChange in querySnapshot!!.documentChanges) {
+                    when (docChange.type) {
+                        DocumentChange.Type.ADDED -> {
+                            val post = docChange.document.toObject(Quotes::class.java)
+                            val id = docChange.document.id
+                            quoteIds.add(id)
+                            quotes_array.add(post.quotes)
+                        }
+
+                    }
+                }
+
+                for (i in 0 until quotes_array.size) {
+                    when {
+                        quoteIds[i].first() == 'h' -> happyQuotes.add(quotes_array[i])
+                        quoteIds[i].first() == 's' -> sadQuotes.add(quotes_array[i])
+                    }
+                }
+            }
+        })
     }
 
     private fun getSongs(smile_percent: Double): String{
@@ -114,6 +148,19 @@ class ColorActivity : AppCompatActivity() {
             else -> {
                 val randomIndex = (0 until hypeUrls.size).shuffled().first()
                 hypeUrls[randomIndex]
+            }
+        }
+    }
+
+    private fun getQuotes(smile_percent: Double): String {
+        return when {
+            (smile_percent <= 0.5) -> {
+                val randomIndex = (0 until sadQuotes.size).shuffled().first()
+                sadQuotes[randomIndex]
+            }
+            else -> {
+                val randomIndex = (0 until happyQuotes.size).shuffled().first()
+                happyQuotes[randomIndex]
             }
         }
     }
